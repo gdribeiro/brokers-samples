@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+  producer:
+    container_name: producer
+    build: ./producer/
+    depends_on:
+      - rabbit
+    links:
+      - rabbit
+    
+
+  consumer:
+    container_name: consumer
+    build: ./consumer/
+    depends_on:
+      - producer
+      - rabbit
+    links:
+      - rabbit
+  rabbit:
+    image: rabbitmq:management
+    environment:
+      - RABBITMQ_DISK_FREE_LIMIT="300000"
+    ports:
+      - 5672:5672
+      - 15672:15672
+      - 4369:4369
+      - 5671:5671
